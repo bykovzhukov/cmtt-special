@@ -8,26 +8,26 @@ import * as Analytics from './lib/analytics';
 import { makeElement } from './lib/dom';
 
 const CSS = {
-    main: 'specialContainer',
+  main: 'special',
 };
 
 class Special extends BaseSpecial {
-    constructor(params = {}) {
-        super();
+  constructor(params = {}) {
+    super();
 
-        Object.assign(this.params, params);
-        this.saveParams();
+    Object.assign(this.params, params);
+    this.saveParams();
 
-        if (Data && params.data) {
-            Object.assign(Data, params.data);
-        }
-
-        if (this.params.css) {
-            this.loadStyles(this.params.css).then(() => this.init());
-        } else {
-            this.init();
-        }
+    if (Data && params.data) {
+      Object.assign(Data, params.data);
     }
+
+    if (this.params.css) {
+      this.loadStyles(this.params.css).then(() => this.init());
+    } else {
+      this.init();
+    }
+  }
 
     init() {
         /** Демонстрация */
