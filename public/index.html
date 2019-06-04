@@ -24,9 +24,30 @@
         justify-content: center;
         align-items: center;
         width: 100%;
+        max-width: 100%;
         min-height: 100vh;
         padding-top: 50px;
         overflow: hidden;
+    }
+    @media (min-width: 680px) {
+        .wrapper {
+            width: 640px;
+            margin: 0 auto;
+        }
+    }
+    @media (min-width: 1025px) {
+        .wrapper {
+            width: 1020px;
+        }
+        .wrapper[air-module="module.feed"] {
+            width: 640px;
+            margin: 0 0 0 80px;
+        }
+    }
+    @media (min-width: 1340px) {
+        .wrapper {
+            width: 1060px;
+        }
     }
     .wrapper > span {
         position: fixed;
@@ -39,11 +60,22 @@
         height: 50px;
         background-color: #feebef;
     }
+    .toggle {
+        position: fixed;
+        z-index: 9999;
+        top: 10px;
+        left: 10px;
+        user-select: none;
+    }
 </style>
 
-<div class="wrapper">
+<div id="wrapper" class="wrapper">
     <span></span>
-    <div style="max-width: 100%; padding: 10px 0;">
+    <label class="toggle">
+        <input type="checkbox" id="feed-toggle">
+        feed
+    </label>
+    <div style="width: 1060px; max-width: 100%;">
         <div id="special"></div>
     </div>
 </div>
@@ -61,7 +93,7 @@
         new Special.Special({
           // css: './all.css?' + ver,
           container: container,
-          isFeed: document.querySelector('[air-module="module.feed"]') ? true : false,
+          isFeed: document.querySelector('[air-module="module.feed"], [air-module="module.page_search"]') ? true : false,
           share: {
             url: '',
             title: '',
@@ -71,6 +103,24 @@
     }
     d.body.appendChild(s);
   })(document, 0);
+
+  (function(d, w) {
+    var toggle = d.getElementById('feed-toggle');
+    var wrapper = d.getElementById('wrapper');
+    var specialContainer = d.getElementById('special');
+
+    toggle.addEventListener('change', function () {
+      if (this.checked) {
+        wrapper.setAttribute('air-module', 'module.feed');
+        specialContainer.classList.remove('is-not-feed');
+        specialContainer.classList.add('is-feed');
+      } else {
+        wrapper.removeAttribute('air-module');
+        specialContainer.classList.remove('is-feed');
+        specialContainer.classList.add('is-not-feed');
+      }
+    });
+  })(document, window);
 </script>
 
 </body>

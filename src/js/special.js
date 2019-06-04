@@ -40,9 +40,7 @@ class Special extends BaseSpecial {
         Share.make(this.container, this.params.share);
     }
 
-    /**
-     * Код ниже не нужен, просто пара примеров
-     */
+    this.typeShowing = this.params.isFeed ? 'in Feed' : 'in Page';
 
     /**
      * Клики слушаются чаще всего. Просто добавляем атрибут data-click с названием функции-обработчика
