@@ -1,11 +1,11 @@
+import Config from './src/config';
+
 const path = require('path');
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const autoprefixer = require('autoprefixer');
-
-import Config from './src/config';
 
 module.exports = (env, options) => {
   const inProd = options.mode === 'production';
@@ -15,71 +15,71 @@ module.exports = (env, options) => {
       contentBase: path.join(__dirname, 'public'),
       compress: true,
       // hot: true,
-      port: 3000
+      port: 3000,
     },
     entry: './src/index.js',
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'all.js',
-      library: Config.name
+      library: Config.name,
     },
     devtool: inProd ? 'source-map' : false,
     optimization: {
       minimizer: [
-        // new UglifyJsPlugin({
-        //   cache: true,
-        //   parallel: true,
-        //   sourceMap: true
-        // }),
-        // new OptimizeCSSAssetsPlugin({
-        //   cssProcessorOptions: {
-        //     map: {
-        //       inline: false
-        //     }
-        //   }
-        // })
-      ]
+        new UglifyJsPlugin({
+          cache: true,
+          parallel: true,
+          sourceMap: true,
+        }),
+        new OptimizeCSSAssetsPlugin({
+          cssProcessorOptions: {
+            map: {
+              inline: false,
+            },
+          },
+        }),
+      ],
     },
     plugins: inProd
       ? [
-          new MiniCssExtractPlugin({ filename: 'all.css' }),
-          new webpack.DefinePlugin({ IS_PRODUCTION: JSON.stringify(inProd) })
-        ]
+        new MiniCssExtractPlugin({ filename: 'all.css' }),
+        new webpack.DefinePlugin({ IS_PRODUCTION: JSON.stringify(inProd) }),
+      ]
       : [
-          new webpack.HotModuleReplacementPlugin(),
-          new webpack.DefinePlugin({ IS_PRODUCTION: JSON.stringify(inProd) })
-        ],
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({ IS_PRODUCTION: JSON.stringify(inProd) }),
+      ],
     module: {
       rules: [{
-        test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'
+        test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader',
       }, {
         test: /\.styl$/,
         use: inProd
           ? [
-              MiniCssExtractPlugin.loader,
-              {
-                loader: 'css-loader',
-                options: {
-                  url: false,
-                  sourceMap: true
-                }
+            MiniCssExtractPlugin.loader,
+            {
+              loader: 'css-loader',
+              options: {
+                url: false,
+                sourceMap: true,
               },
-              {
-                loader: 'postcss-loader',
-                options: {
-                  plugins: [autoprefixer()],
-                  sourceMap: true
-                }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: [autoprefixer()],
+                sourceMap: true,
               },
-              {
-                loader: 'stylus-loader',
-                options: {
-                  sourceMap: true
-                }
-              }
-            ]
-          : ['style-loader', 'css-loader?url=false', 'stylus-loader']
-      }]
-    }
-  }
+            },
+            {
+              loader: 'stylus-loader',
+              options: {
+                sourceMap: true,
+              },
+            },
+          ]
+          : ['style-loader', 'css-loader?url=false', 'stylus-loader'],
+      }],
+    },
+  };
 };
