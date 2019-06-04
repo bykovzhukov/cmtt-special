@@ -17,7 +17,7 @@ export const init = () => {
  * @param {Element} parentContainer - likely container will be placed here
  * @param {Object} set - object with optional params (title, url, twitter)
  */
-export const make = (parentContainer, set = {}) => {
+export const make = (parentContainer, set = {}, typeShowing) => {
     let likelyContainer = makeElement('div', [CSS.likely, CSS.likelyCustom]);
     let socials = ['facebook', 'vkontakte', 'twitter'];
 
@@ -27,7 +27,7 @@ export const make = (parentContainer, set = {}) => {
         if (social === 'facebook') button.innerHTML = 'Поделиться';
 
         button.addEventListener('click', () => {
-            Analytics.sendEvent(`Share ${social}`);
+          Analytics.sendEvent(typeShowing ? `${typeShowing} — Share ${social}` : `Share ${social}`);
         });
 
         likelyContainer.appendChild(button);

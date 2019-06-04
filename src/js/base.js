@@ -71,7 +71,7 @@ class BaseSpecial {
 
             /** Send all links clicks to analytics */
             if (eventName === 'click' && target.tagName.toLowerCase() === 'a') {
-                Analytics.sendEvent(target.href);
+              Analytics.sendEvent(this.typeShowing ? `${this.typeShowing} — ${target.href}` : target.href);
             }
 
             if (action) break;
