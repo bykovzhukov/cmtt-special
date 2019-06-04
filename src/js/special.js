@@ -29,60 +29,19 @@ class Special extends BaseSpecial {
     }
   }
 
-    init() {
-        /** Демонстрация */
-        this.container.classList.add(CSS.main);
-        this.container.textContent = Data.title;
-        this.container.innerHTML += Svg.demo;
-        this.container.appendChild(this.demoButton());
-        this.container.appendChild(this.demoInput());
+  setInitialParams() {
+    this.activeIndex = 0;
+    this.correctAnswers = 0;
+  }
 
-        Share.make(this.container, this.params.share);
-    }
+  init() {
+    this.container.classList.add(CSS.main);
+    this.container.classList.add(this.params.isFeed ? 'is-feed' : 'is-not-feed');
 
     this.typeShowing = this.params.isFeed ? 'in Feed' : 'in Page';
 
-    /**
-     * Клики слушаются чаще всего. Просто добавляем атрибут data-click с названием функции-обработчика
-     */
-    demoButton() {
-        return makeElement('button', CSS.main + '__button', {
-            type: 'button',
-            textContent: 'Кнопка',
-            data: {
-                click: 'demoClickHandler'
-            }
-        });
-    }
-
-    demoClickHandler(el, event) {
-        console.log('Click on element', el);
-
-        /**
-         * Так отправляются события в аналитику, но обычно они прописываются в конце,
-         * когда понятно, какие вообще данные будут полезны
-         */
-        Analytics.sendEvent('Button', 'Click');
-    }
-
-    /**
-     * Инпуты реже, но тут та же логика — атрибут data-input.
-     * По идее такое работает со всеми событиями, но я не проверял.
-     * Для keydown лучше писать свой listener
-     */
-    demoInput() {
-        return makeElement('input', CSS.main + '__input', {
-            type: 'text',
-            placeholder: 'Поле ввода',
-            data: {
-                input: 'demoInputWatcher'
-            }
-        });
-    }
-
-    demoInputWatcher(el, event) {
-        console.log('Input value:', el.value);
-    }
+    this.setInitialParams();
+  }
 }
 
 export default Special;
