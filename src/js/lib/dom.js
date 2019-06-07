@@ -5,33 +5,33 @@
  * @param {Object} attributes - object with html attributes
  */
 export const makeElement = (tagName, classNames = [], attributes = []) => {
-    tagName = tagName.toLowerCase();
+  tagName = tagName.toLowerCase();
 
-    let element = document.createElement(tagName);
+  const element = document.createElement(tagName);
 
-    if (classNames) {
-        if (typeof classNames === 'object') {
-            classNames.forEach(cname => {
-                element.classList.add(cname);
-            });
-        } else if (typeof classNames === 'string') {
-            element.classList.add(classNames);
-        }
+  if (classNames) {
+    if (typeof classNames === 'object') {
+      classNames.forEach((cname) => {
+        element.classList.add(cname);
+      });
+    } else if (typeof classNames === 'string') {
+      element.classList.add(classNames);
     }
+  }
 
-    for (let attr in attributes) {
-        if (attr === 'data') {
-            let dataAttributes = attributes[attr];
+  for (const attr in attributes) {
+    if (attr === 'data') {
+      const dataAttributes = attributes[attr];
 
-            for (let attr in dataAttributes) {
-                element.dataset[attr] = dataAttributes[attr];
-            }
-        } else {
-            element[attr] = attributes[attr];
-        }
+      for (const attr in dataAttributes) {
+        element.dataset[attr] = dataAttributes[attr];
+      }
+    } else {
+      element[attr] = attributes[attr];
     }
+  }
 
-    return element;
+  return element;
 };
 
 /**
@@ -39,15 +39,15 @@ export const makeElement = (tagName, classNames = [], attributes = []) => {
  * @param {Object} obj - object
  */
 export const cacheElements = (obj, attr = 'view') => {
-    let newObj = {},
-        elements = document.querySelectorAll(`[data-${attr}]`);
+  const newObj = {};
+  const elements = document.querySelectorAll(`[data-${attr}]`);
 
-    Array.prototype.forEach.call(elements, el => {
-        let name = el.dataset[attr];
-        newObj[name] = el;
-    });
+  Array.prototype.forEach.call(elements, (el) => {
+    const name = el.dataset[attr];
+    newObj[name] = el;
+  });
 
-    Object.assign(obj, newObj);
+  Object.assign(obj, newObj);
 };
 
 /**
@@ -55,15 +55,15 @@ export const cacheElements = (obj, attr = 'view') => {
  * @param {Element} element
  */
 export const getSiblings = (element) => {
-    let siblings = [],
-        sibling = element.parentNode.firstChild;
+  const siblings = [];
+  let sibling = element.parentNode.firstChild;
 
-    for (; sibling; sibling = sibling.nextSibling) {
-        if (sibling.nodeType !== 1 || sibling === element) continue;
-        siblings.push(sibling);
-    }
+  for (; sibling; sibling = sibling.nextSibling) {
+    if (sibling.nodeType !== 1 || sibling === element) continue;
+    siblings.push(sibling);
+  }
 
-    return siblings;
+  return siblings;
 };
 
 /**
@@ -71,9 +71,9 @@ export const getSiblings = (element) => {
  * @param {Element} parent
  */
 export const removeChildren = (parent) => {
-    while (parent.firstChild) {
-        parent.removeChild(parent.firstChild);
-    }
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
 };
 
 /**
@@ -81,9 +81,9 @@ export const removeChildren = (parent) => {
  * @param {Element} element
  */
 export const removeElement = (element) => {
-    if (element) {
-        element.parentNode.removeChild(element);
-    }
+  if (element) {
+    element.parentNode.removeChild(element);
+  }
 };
 
 /**
@@ -91,11 +91,11 @@ export const removeElement = (element) => {
  * @param {String} html
  */
 export const htmlStringToNode = (html) => {
-    let el = document.createElement('div');
+  const el = document.createElement('div');
 
-    el.innerHTML = html;
+  el.innerHTML = html;
 
-    return el.firstChild;
+  return el.firstChild;
 };
 
 /**
@@ -104,10 +104,8 @@ export const htmlStringToNode = (html) => {
  * @param {Element} el
  */
 export const prepend = (parent, el) => {
-    parent.insertBefore(el, parent.firstChild);
+  parent.insertBefore(el, parent.firstChild);
 };
 
 /** Quick check if element is in DOM */
-export const isElementInDom = (el) => {
-    return el.parentNode;
-};
+export const isElementInDom = el => el.parentNode;

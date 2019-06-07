@@ -1,90 +1,88 @@
-import Config from './../config';
+import Config from '../config';
 import * as Analytics from './lib/analytics';
 
 /**
  * Base special constructor with common methods
  */
 class BaseSpecial {
+  constructor() {
+    this.keyCodes = {
+      enter: 13,
+    };
+    this.params = {
+      container: document.body,
+    };
 
-    constructor() {
-        this.keyCodes = {
-            enter: 13
-        };
-        this.params = {
-            container: document.body
-        };
-
-        if (Config.sendPageView) {
-            Analytics.sendPageView();
-        }
+    if (Config.sendPageView) {
+      Analytics.sendPageView();
     }
+  }
 
-    /**
+  /**
      * Save custom params
      * @param {Object} params - params object with custom values
      */
-    saveParams() {
-        Object.assign(this.params, Config);
-        this.container = this.params.container;
+  saveParams() {
+    Object.assign(this.params, Config);
+    this.container = this.params.container;
 
-        this.addEventListeners();
-    }
+    this.addEventListeners();
+  }
 
-    /**
+  /**
      * Load css file
      * @param {String} path
      */
-    loadStyles(path) {
-        return new Promise((resolve, reject) => {
-            let link = document.createElement('link');
+  loadStyles(path) {
+    return new Promise((resolve, reject) => {
+      const link = document.createElement('link');
 
-            link.rel = 'stylesheet';
-            link.href = path;
+      link.rel = 'stylesheet';
+      link.href = path;
 
-            link.onload = () => resolve();
-            link.onerror = () => reject();
+      link.onload = () => resolve();
+      link.onerror = () => reject();
 
-            document.body.appendChild(link);
-        });
-    }
+      document.body.appendChild(link);
+    });
+  }
 
-    /**
+  /**
      * Add event listeners to document
      */
-    addEventListeners() {
-        this.params.listenedEvents.forEach(eventName => {
-            this.container.addEventListener(eventName, event => this.defaultEventHandler(event, eventName));
-        });
-    }
+  addEventListeners() {
+    this.params.listenedEvents.forEach((eventName) => {
+      this.container.addEventListener(eventName, event => this.defaultEventHandler(event, eventName));
+    });
+  }
 
-    /**
+  /**
      * Default events handler
      * @param {Object} event
      * @param {String} eventName
      */
-    defaultEventHandler(event, eventName) {
-        let target = event.target;
-        let action;
+  defaultEventHandler(event, eventName) {
+    let { target } = event;
+    let action;
 
-        while (target.parentNode && target !== event.currentTarget) {
-            action = target.dataset[eventName];
+    while (target.parentNode && target !== event.currentTarget) {
+      action = target.dataset[eventName];
 
-            /** Send all links clicks to analytics */
-            if (eventName === 'click' && target.tagName.toLowerCase() === 'a') {
-              Analytics.sendEvent(this.typeShowing ? `${this.typeShowing} — ${target.href}` : target.href);
-            }
+      /** Send all links clicks to analytics */
+      if (eventName === 'click' && target.tagName.toLowerCase() === 'a') {
+        Analytics.sendEvent(this.typeShowing ? `${this.typeShowing} — ${target.href}` : target.href);
+      }
 
-            if (action) break;
-            target = target.parentNode;
-        }
-
-        action = target.dataset[eventName];
-
-        if (action && this[action]) {
-            this[action](event.target, event);
-        }
+      if (action) break;
+      target = target.parentNode;
     }
 
+    action = target.dataset[eventName];
+
+    if (action && this[action]) {
+      this[action](event.target, event);
+    }
+  }
 }
 
 export default BaseSpecial;

@@ -3,11 +3,9 @@
  * @param {Array} array
  */
 export const getMostFrequentValue = (array) => {
-    let result = [...array];
+  const result = [...array];
 
-    return result.sort((a, b) =>
-        result.filter(v => v === a).length - result.filter(v => v === b).length
-    ).pop();
+  return result.sort((a, b) => result.filter(v => v === a).length - result.filter(v => v === b).length).pop();
 };
 
 /**
@@ -15,20 +13,19 @@ export const getMostFrequentValue = (array) => {
  * @param {Array} array
  */
 export const shuffle = (array) => {
-    let j, x, i;
+  let j; let x; let
+    i;
 
-    for (i = array.length - 1; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1));
-        x = array[i];
-        array[i] = array[j];
-        array[j] = x;
-    }
+  for (i = array.length - 1; i > 0; i--) {
+    j = Math.floor(Math.random() * (i + 1));
+    x = array[i];
+    array[i] = array[j];
+    array[j] = x;
+  }
 };
 
 /**
  * Convert nodelist to array
  * @param {NodeList} nodeList
  */
-export const toArray = (nodeList) => {
-    return Array.prototype.slice.call(nodeList);
-};
+export const toArray = nodeList => Array.prototype.slice.call(nodeList);
