@@ -1,69 +1,94 @@
-// Если спецпроект интегрирован в сайт, из media queries обычно хватает только двух: mobile и not_mobile
 @import 'mq'
-
 @import 'functions'
 @import 'keyframes'
 
-// base.styl подключается только в том случае, когда спецпроект расположен на отдельной странице
-// @import 'base'
+$colors = {}
 
-$colors = {
-  white: #ffffff,
-  black: #000000
-}
-
-// FYI: на десктопе на странице статьи максимальная ширина контейнера — 1060px. В ленте сайта — 640px.
-// Мобильная версия начинается с 679px, и там ограничений по ширине нет
-
-// Название класса рекомендуется выбирать так, чтобы точно не было конфликтов с существующими спецпроектами.
-// Обычно имени проекта достаточно
-.specialContainer
+.special
+  position: relative
+  z-index: 99
+  width: 1080px
+  max-width: 100%
+  font-family: 'Roboto', sans-serif
   font-size: 16px
-  line-height: 1.5em
-  padding: 15px
-  border: 1px solid $colors.black
-  width: 100%
-  max-width: 600px
-  text-align: center
-  margin: auto
-  display: flex
-  flex-direction: column
-  align-items: center
-  justify-content: center
+  line-height: normal
+  text-size-adjust: 100%
+  background-color: #fff
+  overflow: hidden
 
-  @media $mq.notMobile
-    font-size: 18px
-    padding: 50px
-
-  svg
-    display: block
-    fill: currentColor
-
-  // Для подобных элементов придется сбрасывать стили, если спецпроект не на отдельной странице
-  input,
   button
-    box-sizing: border-box
-    display: block
-    width: 200px
-    padding: 10px
-    margin: 5px 0
+    font-family: inherit
+    font-size: inherit
+    font-weight: inherit
+    border-radius: 0
+    border: none
+    user-select: none
+    outline: none
+    appearance: none
+    cursor: pointer
 
   .likely
-    display: flex
+
+    &--custom
+      display: flex
 
     &__widget
+      flex-shrink: 0
       display: flex
       align-items: center
       justify-content: center
-      background-color: transparent
-      border: 1px solid
-      height: 40px
-      padding: 0 10px
-      margin: 0 2px
-      color: inherit
+      min-width: 54px
+      height: 44px
+      color: #000
+      border: 1px solid currentColor
+      background-color: #fff
+      cursor: pointer
+      transition: opacity .2s
+
+      &:not(:last-child)
+        margin-right: 10px
+
+      &:hover
+        opacity: .6
+
+        @media $mq.notHover
+          opacity: 1
+
+    &__counter
+      display: none
 
     &__icon
       background-color: transparent
 
-      svg
+      & svg
         display: block
+        width: 24px
+        height: @width
+        fill: currentColor
+
+      &--vkontakte
+
+        & svg
+          width: 28px
+          height: @width
+
+    &__button
+      display: none
+
+  &.is-not-feed .likely
+
+    @media $mq.desktop
+
+      &__widget
+        height: 54px
+
+        &--facebook
+          padding: 0 20px 0 8px
+
+      &__icon--facebook
+        margin-right: 6px
+
+      &__button
+        display: block
+        font-size: 18px
+        line-height: 1
